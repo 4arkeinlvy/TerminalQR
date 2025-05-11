@@ -1,0 +1,325 @@
+/* Main Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #1a1b26;
+    color: #a9b1d6;
+    padding: 20px;
+}
+
+/* Terminal style wrapper */
+.wrapper {
+    background: #24283b;
+    border-radius: 8px;
+    max-width: 700px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Terminal Header */
+.terminal-header {
+    background: #1a1b26;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #414868;
+}
+
+.terminal-title {
+    color: #a9b1d6;
+    font-size: 0.9rem;
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.control {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.close {
+    background: #f7768e;
+}
+
+.minimize {
+    background: #e0af68;
+}
+
+.maximize {
+    background: #9ece6a;
+}
+
+/* Header Styles */
+header {
+    padding: 25px 30px 15px;
+    text-align: center;
+}
+
+.ascii-art {
+    font-size: 0.5rem;
+    line-height: 1.2;
+    color: #7aa2f7;
+    white-space: pre;
+    margin-bottom: 15px;
+    overflow: auto;
+    max-width: 100%;
+}
+
+.subtitle {
+    color: #a9b1d6;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    opacity: 0.8;
+}
+
+/* Terminal Text */
+.terminal-text {
+    padding: 10px 30px;
+}
+
+.terminal-line {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+    opacity: 0;
+    animation: lineAppear 0.3s ease forwards;
+}
+
+@keyframes lineAppear {
+    to {
+        opacity: 1;
+    }
+}
+
+.terminal-prompt {
+    color: #73daca;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.command {
+    color: #bb9af7;
+}
+
+.terminal-output {
+    color: #a9b1d6;
+    margin-left: 15px;
+    font-size: 0.9rem;
+}
+
+/* Form Styles */
+.form {
+    padding: 20px 30px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #1a1b26;
+    border-radius: 6px;
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+
+.form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #a9b1d6;
+    font-size: 0.95rem;
+    padding: 12px 15px;
+    outline: none;
+}
+
+.form input::placeholder {
+    color: #565f89;
+}
+
+.generate-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #7aa2f7;
+    color: #1a1b26;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.generate-btn:hover {
+    background: #6b90e5;
+    transform: translateY(-2px);
+}
+
+.generate-btn:active {
+    transform: translateY(0);
+}
+
+/* QR Code Styles */
+.qr-code {
+    padding: 20px 30px 30px;
+    display: none;
+}
+
+.wrapper.active .qr-code {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.processing-text {
+    color: #e0af68;
+    position: relative;
+}
+
+.processing-text::after {
+    content: "";
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ""; }
+    40% { content: "."; }
+    60% { content: ".."; }
+    80%, 100% { content: "..."; }
+}
+
+.success {
+    color: #9ece6a;
+}
+
+.qr-container {
+    background: #1a1b26;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #414868;
+}
+
+.qr-container img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 0;
+    background: #1a1b26;
+    color: #7aa2f7;
+    font-weight: bold;
+    border: 2px solid #7aa2f7;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.download-btn:hover {
+    background: #7aa2f7;
+    color: #1a1b26;
+}
+
+.download-btn:active {
+    transform: scale(0.98);
+}
+
+.download-btn .icon {
+    font-size: 1.2rem;
+}
+
+/* Footer Styles */
+footer {
+    padding: 15px 30px;
+    border-top: 1px solid #414868;
+}
+
+.command-blinker {
+    display: inline-block;
+    color: #a9b1d6;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Processing states */
+.processing, .success {
+    display: none;
+}
+
+.wrapper.processing .processing {
+    display: flex;
+}
+
+.wrapper.success .success {
+    display: flex;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 500px) {
+    .wrapper {
+        border-radius: 0;
+    }
+    
+    .ascii-art {
+        font-size: 0.4rem;
+    }
+    
+    .terminal-prompt {
+        font-size: 0.8rem;
+    }
+    
+    .form input {
+        font-size: 0.85rem;
+    }
+}
+
+/* Animation for QR Code appearance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

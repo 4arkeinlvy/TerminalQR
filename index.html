@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal QR</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/x-icon" href="../image.ico">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <div class="terminal-header">
+                <span class="terminal-title">terminal-qr</span>
+                <div class="terminal-controls">
+                    <span class="control close"></span>
+                    <span class="control minimize"></span>
+                    <span class="control maximize"></span>
+                </div>
+            </div>
+            
+            <div class="ascii-art">
+████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗      ██████╗ ██████╗ 
+╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     ██╔═══██╗██╔══██╗
+   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     ██║   ██║██████╔╝
+   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     ██║▄▄ ██║██╔══██╗
+   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗╚██████╔╝██║  ██║
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝ ╚══▀▀═╝ ╚═╝  ╚═╝
+            </div>
+            <p class="subtitle">Generate QR codes through the command line</p>
+        </header>
+        
+        <div class="terminal-text">
+            <div class="terminal-line">
+                <span class="terminal-prompt">user@terminal:~$</span>
+                <span class="command">qr --help</span>
+            </div>
+            <div class="terminal-line terminal-output">
+                <span>Usage: Enter URL or text below and press ENTER</span>
+            </div>
+        </div>
+        
+        <div class="form">
+            <div class="input-wrapper">
+                <span class="terminal-prompt">user@terminal:~$</span>
+                <input type="text" placeholder="Enter text or URL here">
+            </div>
+            <button class="generate-btn">GENERATE</button>
+        </div>
+        
+        <div class="qr-code">
+            <div class="terminal-line">
+                <span class="terminal-prompt">user@terminal:~$</span>
+                <span class="command">qr --generate</span>
+            </div>
+            <div class="terminal-line terminal-output processing">
+                <span class="processing-text">Processing...</span>
+            </div>
+            <div class="terminal-line terminal-output success">
+                <span>QR code successfully generated</span>
+            </div>
+            
+            <div class="qr-container">
+                <img src="" alt="qr-code">
+            </div>
+            
+            <button class="download-btn">
+                <span class="icon">↓</span>
+                <span class="text">SAVE QR CODE</span>
+            </button>
+        </div>
+        
+        <footer>
+            <div class="terminal-line">
+                <span class="terminal-prompt">user@terminal:~$</span>
+                <span class="command-blinker">_</span>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modify this path to point to your JavaScript file -->
+    <script src="../js/script.js"></script>
+</body>
+</html>
