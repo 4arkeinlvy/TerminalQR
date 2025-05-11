@@ -4,9 +4,26 @@ const qrInput = wrapper.querySelector(".form input");
 const genBtn = wrapper.querySelector(".generate-btn");
 const qrImage = wrapper.querySelector(".qr-code img");
 const downloadBtn = wrapper.querySelector(".download-btn");
+const qrCodeSection = wrapper.querySelector(".qr-code");
 const processingText = wrapper.querySelector(".processing");
 const successText = wrapper.querySelector(".success");
 const commandBlinker = wrapper.querySelector(".command-blinker");
+
+// Debug function - add to page
+function debugToPage(message) {
+    const debugDiv = document.getElementById('debug-info') || (() => {
+        const div = document.createElement('div');
+        div.id = 'debug-info';
+        div.style.cssText = 'position:fixed;bottom:10px;left:10px;background:#000;color:#0f0;padding:10px;font-family:monospace;z-index:9999;max-width:80%;overflow:auto;max-height:200px;';
+        document.body.appendChild(div);
+        return div;
+    })();
+    
+    const msgEl = document.createElement('div');
+    msgEl.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+    debugDiv.appendChild(msgEl);
+    console.log(message);
+}
 
 // Terminal typing effect
 function typeTerminal(element, text, delay = 50) {
@@ -26,6 +43,8 @@ function typeTerminal(element, text, delay = 50) {
 
 // Initialize terminal effect
 document.addEventListener('DOMContentLoaded', () => {
+    debugToPage("DOM fully loaded");
+    
     // Add animation delay to terminal lines
     const terminalLines = document.querySelectorAll(".terminal-line");
     terminalLines.forEach((line, index) => {
@@ -45,12 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         commandBlinker.style.opacity = commandBlinker.style.opacity === "0" ? "1" : "0";
     }, 600);
+    
+    // Force QR code section display block initially then hide it
+    // This ensures CSS is applied correctly
+    qrCodeSection.style.display = "block";
+    setTimeout(() => {
+        qrCodeSection.style.display = "";
+    }, 100);
 });
 
 // Function to generate QR code
 function generateQR() {
     let qrValue = qrInput.value.trim();
+    debugToPage(`Generating QR for: ${qrValue}`);
+    
     if (!qrValue) {
+        debugToPage("Empty input - adding shake animation");
         // Add shake animation if empty
         qrInput.parentElement.classList.add("shake");
         setTimeout(() => {
@@ -71,13 +100,22 @@ function generateQR() {
     // Make wrapper active to show QR section
     wrapper.classList.add("active");
     
+    // IMPORTANT FIX: Explicitly ensure QR section is visible
+    qrCodeSection.style.display = "block";
+    
+    debugToPage("Starting QR generation process");
+    
     // Simulate terminal processing
     setTimeout(() => {
         // Generate QR code using API
-        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrValue)}`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrValue)}`;
+        debugToPage(`Loading QR from API: ${qrUrl}`);
         
-        // Handle image loading
-        qrImage.addEventListener("load", () => {
+        // Clear previous event listeners to prevent duplicates
+        const newImg = document.createElement('img');
+        newImg.onload = function() {
+            debugToPage("QR image loaded successfully!");
+            
             // Change from processing to success state
             wrapper.classList.remove("processing");
             wrapper.classList.add("success");
@@ -90,23 +128,51 @@ function generateQR() {
             // Terminal command effect for success message
             const successCmd = document.querySelector(".success span");
             typeTerminal(successCmd, "QR code successfully generated");
-        });
+            
+            // Force repaint of the QR container
+            const qrContainer = wrapper.querySelector(".qr-container");
+            qrContainer.style.display = "none";
+            setTimeout(() => {
+                qrContainer.style.display = "flex";
+            }, 10);
+        };
+        
+        newImg.onerror = function() {
+            debugToPage("ERROR: Failed to load QR image!");
+            genBtn.disabled = false;
+            genBtn.style.opacity = "1";
+            genBtn.textContent = "RETRY";
+        };
+        
+        newImg.src = qrUrl;
+        
+        // Replace the current image
+        const qrContainer = wrapper.querySelector(".qr-container");
+        qrContainer.innerHTML = '';
+        qrContainer.appendChild(newImg);
+        
     }, 1200);
 }
 
 // Generate QR on button click
-genBtn.addEventListener("click", generateQR);
+genBtn.addEventListener("click", function() {
+    debugToPage("Generate button clicked");
+    generateQR();
+});
 
 // Generate QR on Enter key press
 qrInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
+        debugToPage("Enter key pressed");
         generateQR();
     }
 });
 
-// Hide QR code section if input is empty
+// FIXED: Only hide QR when input is truly empty
 qrInput.addEventListener("keyup", () => {
+    // Only hide the QR code when the input becomes empty
     if (!qrInput.value.trim() && wrapper.classList.contains("active")) {
+        debugToPage("Input empty - closing QR section");
         // Add closing animation
         wrapper.classList.add("closing");
         
@@ -121,10 +187,13 @@ qrInput.addEventListener("keyup", () => {
 
 // Download QR code functionality
 downloadBtn.addEventListener("click", () => {
-    if (!qrImage.src || qrImage.src.includes("data:,")) {
+    const currentImage = wrapper.querySelector(".qr-container img");
+    if (!currentImage || !currentImage.src || currentImage.src.includes("data:,")) {
+        debugToPage("No QR image to download");
         return;
     }
     
+    debugToPage("Downloading QR code");
     // Change button state
     const originalText = downloadBtn.querySelector(".text").textContent;
     downloadBtn.querySelector(".text").textContent = "DOWNLOADING...";
@@ -134,11 +203,16 @@ downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     
     // Get the QR code image
-    const qrUrl = qrImage.src;
+    const qrUrl = currentImage.src;
     
     // Fetch the image and convert to blob
     fetch(qrUrl)
-        .then(response => response.blob())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.blob();
+        })
         .then(blob => {
             // Create object URL
             const objectUrl = URL.createObjectURL(blob);
@@ -160,6 +234,7 @@ downloadBtn.addEventListener("click", () => {
                 // Clean up
                 URL.revokeObjectURL(objectUrl);
                 downloadBtn.querySelector(".text").textContent = "DOWNLOADED!";
+                debugToPage("QR code downloaded successfully");
                 
                 setTimeout(() => {
                     downloadBtn.querySelector(".text").textContent = originalText;
@@ -169,6 +244,7 @@ downloadBtn.addEventListener("click", () => {
             }, 800);
         })
         .catch(error => {
+            debugToPage(`Error downloading QR code: ${error.message}`);
             console.error("Error downloading QR code:", error);
             downloadBtn.querySelector(".text").textContent = "DOWNLOAD FAILED";
             
@@ -179,9 +255,25 @@ downloadBtn.addEventListener("click", () => {
         });
 });
 
-// Add shake animation
+// Add CSS fixes and shake animation
 document.head.insertAdjacentHTML('beforeend', `
     <style>
+        /* Fix for QR code visibility */
+        .wrapper.active .qr-code {
+            display: block !important;
+        }
+        
+        /* Make sure QR container is visible when generated */
+        .wrapper.success .qr-container {
+            display: flex !important;
+            justify-content: center !important;
+        }
+        
+        /* Debug styling */
+        #debug-info {
+            display: block;
+        }
+        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-5px); }
@@ -215,3 +307,6 @@ document.head.insertAdjacentHTML('beforeend', `
         }
     </style>
 `);
+
+// Log initial state
+debugToPage("Script initialized");
