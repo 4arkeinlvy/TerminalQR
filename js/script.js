@@ -11,18 +11,8 @@ const commandBlinker = wrapper.querySelector(".command-blinker");
 
 // Debug function - add to page
 function debugToPage(message) {
-    const debugDiv = document.getElementById('debug-info') || (() => {
-        const div = document.createElement('div');
-        div.id = 'debug-info';
-        div.style.cssText = 'position:fixed;bottom:10px;left:10px;background:#000;color:#0f0;padding:10px;font-family:monospace;z-index:9999;max-width:80%;overflow:auto;max-height:200px;';
-        document.body.appendChild(div);
-        return div;
-    })();
-    
-    const msgEl = document.createElement('div');
-    msgEl.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-    debugDiv.appendChild(msgEl);
-    console.log(message);
+    // No-op: disable debug output without affecting UI logic
+    console.log(message); // Optional: keep logging to console
 }
 
 // Terminal typing effect
