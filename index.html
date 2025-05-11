@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terminal QR</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Generate QR codes with a sleek terminal-style interface">
 </head>
 <body>
     <div class="wrapper">
+        <!-- Terminal Header -->
         <header>
             <div class="terminal-header">
                 <span class="terminal-title">terminal-qr</span>
@@ -19,6 +21,7 @@
                 </div>
             </div>
             
+            <!-- Terminal ASCII Art Logo -->
             <div class="ascii-art">
 ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗      ██████╗ ██████╗ 
 ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     ██╔═══██╗██╔══██╗
@@ -30,24 +33,27 @@
             <p class="subtitle">Generate QR codes through the command line</p>
         </header>
         
+        <!-- Terminal Command Section -->
         <div class="terminal-text">
             <div class="terminal-line">
                 <span class="terminal-prompt">user@terminal:~$</span>
                 <span class="command">qr --help</span>
             </div>
             <div class="terminal-line terminal-output">
-                <span>Usage: Enter URL or text below and press ENTER</span>
+                <span>Usage: Enter URL or text below and press GENERATE</span>
             </div>
         </div>
         
+        <!-- Input Form -->
         <div class="form">
             <div class="input-wrapper">
                 <span class="terminal-prompt">user@terminal:~$</span>
-                <input type="text" placeholder="Enter text or URL here">
+                <input type="text" placeholder="Enter text or URL here" aria-label="QR code content">
             </div>
-            <button class="generate-btn">GENERATE</button>
+            <button class="generate-btn" aria-label="Generate QR code">GENERATE</button>
         </div>
         
+        <!-- QR Code Display Section -->
         <div class="qr-code">
             <div class="terminal-line">
                 <span class="terminal-prompt">user@terminal:~$</span>
@@ -60,16 +66,17 @@
                 <span>QR code successfully generated</span>
             </div>
             
-            <div class="qr-container">
-                <img src="" alt="qr-code">
+            <div class="qr-container" aria-live="polite">
+                <!-- QR code will be inserted here -->
             </div>
             
-            <button class="download-btn">
+            <button class="download-btn" aria-label="Download QR code">
                 <span class="icon">↓</span>
                 <span class="text">SAVE QR CODE</span>
             </button>
         </div>
         
+        <!-- Terminal Footer -->
         <footer>
             <div class="terminal-line">
                 <span class="terminal-prompt">user@terminal:~$</span>
@@ -78,7 +85,6 @@
         </footer>
     </div>
     
-    <!-- Modify this path to point to your JavaScript file -->
-    <script src="/js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

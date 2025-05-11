@@ -1,4 +1,4 @@
-/* Main Styles */
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +16,53 @@ body {
     padding: 20px;
 }
 
-/* Terminal style wrapper */
+/* Animation Keyframes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes dots {
+    0%, 20% { content: ""; }
+    40% { content: "."; }
+    60% { content: ".."; }
+    80%, 100% { content: "..."; }
+}
+
+@keyframes downloadProgress {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+/* Main Terminal Wrapper */
 .wrapper {
     background: #24283b;
     border-radius: 8px;
@@ -25,15 +71,7 @@ body {
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transform: translateY(20px);
     animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 /* Terminal Header */
@@ -60,7 +98,6 @@ body {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    display: inline-block;
 }
 
 .close {
@@ -75,7 +112,7 @@ body {
     background: #9ece6a;
 }
 
-/* Header Styles */
+/* Header Content */
 header {
     padding: 25px 30px 15px;
     text-align: center;
@@ -103,31 +140,14 @@ header {
     padding: 10px 30px;
 }
 
-terminal-line {
-  padding: 10px;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #111;
-  border-left: 4px solid #0f0;
-  margin-bottom: 8px;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Responsive for smaller screens */
-@media (max-width: 600px) {
-  .terminal-line {
-    font-size: 0.9rem;
-    padding: 8px;
-  }
-}
-
-@keyframes lineAppear {
-    to {
-        opacity: 1;
-    }
+.terminal-line {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+    animation-delay: var(--delay, 0s);
 }
 
 .terminal-prompt {
@@ -158,6 +178,12 @@ terminal-line {
     border-radius: 6px;
     padding: 0 15px;
     margin-bottom: 15px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.input-wrapper:focus-within {
+    border-color: #7aa2f7;
 }
 
 .form input {
@@ -168,6 +194,7 @@ terminal-line {
     font-size: 0.95rem;
     padding: 12px 15px;
     outline: none;
+    width: 100%;
 }
 
 .form input::placeholder {
@@ -197,16 +224,25 @@ terminal-line {
     transform: translateY(0);
 }
 
-/* QR Code Styles */
+.generate-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: translateY(0);
+}
+
+/* QR Code Section */
 .qr-code {
     padding: 20px 30px 30px;
     display: none;
 }
 
 .wrapper.active .qr-code {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    display: block;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.wrapper.closing .qr-code {
+    animation: fadeOut 0.3s ease forwards;
 }
 
 .processing-text {
@@ -219,15 +255,13 @@ terminal-line {
     animation: dots 1.5s infinite;
 }
 
-@keyframes dots {
-    0%, 20% { content: ""; }
-    40% { content: "."; }
-    60% { content: ".."; }
-    80%, 100% { content: "..."; }
-}
-
 .success {
     color: #9ece6a;
+}
+
+.wrapper.processing .processing,
+.wrapper.success .success {
+    display: flex;
 }
 
 .qr-container {
@@ -235,31 +269,18 @@ terminal-line {
     border-radius: 8px;
     padding: 25px;
     margin: 20px 0;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid #414868;
-    min-height: 250px; /* Ensure there's space for the QR code */
-}
-.wrapper.closing .qr-code {
-    animation: fadeOut 0.3s ease forwards;
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+    min-height: 250px;
+    transition: opacity 0.3s ease;
 }
 
 .qr-container img {
-    max-width: 200px;
+    max-width: 100%;
     height: auto;
-    display: block !important;
+    display: block;
     border-radius: 4px;
 }
 
@@ -290,8 +311,29 @@ terminal-line {
     transform: scale(0.98);
 }
 
+.download-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 .download-btn .icon {
     font-size: 1.2rem;
+}
+
+.downloading {
+    position: relative;
+    overflow: hidden;
+}
+
+.downloading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(122, 162, 247, 0.2), transparent);
+    animation: downloadProgress 1.5s infinite;
 }
 
 /* Footer Styles */
@@ -306,21 +348,37 @@ footer {
     animation: blink 1s infinite;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+/* Utility Classes */
+.shake {
+    animation: shake 0.5s ease;
+    border-color: #f7768e !important;
 }
 
-/* Processing states */
-.wrapper.processing .processing,
-.wrapper.success .success {
-    display: flex !important;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 500px) {
+/* Responsive Styles */
+@media (max-width: 768px) {
     .wrapper {
-        border-radius: 0;
+        width: 95%;
+    }
+    
+    .terminal-line {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .wrapper {
+        border-radius: 6px;
+    }
+    
+    header {
+        padding: 20px 20px 10px;
+    }
+    
+    .terminal-text, 
+    .form, 
+    .qr-code,
+    footer {
+        padding: 15px 20px;
     }
     
     .ascii-art {
@@ -333,17 +391,31 @@ footer {
     
     .form input {
         font-size: 0.85rem;
+        padding: 10px;
+    }
+    
+    .generate-btn,
+    .download-btn {
+        padding: 10px 0;
+        font-size: 0.85rem;
+    }
+    
+    .qr-container {
+        padding: 15px;
+        min-height: 200px;
     }
 }
 
-/* Animation for QR Code appearance */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
+@media (max-width: 400px) {
+    .ascii-art {
+        font-size: 0.35rem;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .terminal-title {
+        font-size: 0.8rem;
+    }
+    
+    .subtitle {
+        font-size: 0.8rem;
     }
 }
