@@ -7,7 +7,7 @@ A sleek, **terminal-inspired QR code generator** web that allows users to create
 ## **Features**
 
 - **Linux Terminal Aesthetics**  
-  Monospace font, green-on-black color scheme, and terminal-like UI elements for a true Linux terminal experience.
+  Monospace font and terminal-like UI elements for a true Linux terminal.
 
 - **QR Code Generation**  
   Quickly generate QR codes from any **text** or **URL**.
